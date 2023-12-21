@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>readme</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="README_files/libs/clipboard/clipboard.min.js"></script>
+<script src="README_files/libs/quarto-html/quarto.js"></script>
+<script src="README_files/libs/quarto-html/popper.min.js"></script>
+<script src="README_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="README_files/libs/quarto-html/anchor.min.js"></script>
+<link href="README_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="README_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="README_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="README_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="README_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="ideal-abstractions-for-decisions-focused-learning" class="level1">
+<h1>Ideal Abstractions for Decisions-Focused Learning</h1>
+<p>Himadri Mandal 2023-12-22</p>
+<ul>
+<li><a href="#decision-theoretic-context">Decision-Theoretic Context</a>
+<ul>
+<li><a href="#fold-a-simplex">Fold a Simplex</a></li>
+<li><a href="#computing-decision-losses-on-sets">Computing Decision Losses on Sets</a></li>
+</ul></li>
+<li><a href="#objective">Objective</a>
+<ul>
+<li><a href="#integral-objective">Integral Objective</a></li>
+<li><a href="#max-increase-objective">Max-Increase Objective</a></li>
+<li><a href="#vertex-objective">Vertex Objective</a></li>
+</ul></li>
+<li><a href="#end.">End.</a></li>
+</ul>
+<p>This paper is in the context of Reinforcement Learning. The goal of the paper is to perform <strong>ideal</strong> simplifying abstractions by realizing the utility structure of the decisions.</p>
+<p>Modern machine learning systems deal with vast amounts of complex data, like extremely detailed images or graphs with billions of nodes. How can machine learning methods effectively align with real-world decision-making based on such large-scale data? Moreover, how can one manage domains where the problem’s complexity makes it challenging to collect sufficient data for predictive model to comprehend the full scope?</p>
+<p>An agent observes <span class="math inline">\(x\)</span>, and given a model <span class="math inline">\(p_\theta(x, z)\)</span> of <span class="math inline">\(p(x,z)\)</span>, returns an action <span class="math inline">\(a\)</span> following the policy <span class="math inline">\(\pi(\mathcal{Z})\)</span>. Domain knowledge about the task is represented as a loss function <span class="math inline">\(l:\mathcal{Z} \times A \to \mathbb{R}\)</span> measuring the cost of performing action <span class="math inline">\(a\)</span> when the outcome is <span class="math inline">\(x\)</span>. The loss function can be represented as <span class="math inline">\(L_{ij} = l(z_i, a_j)\)</span>. Further, <span class="math inline">\(p = \{p(z_i|x)\}_i\)</span> is a vector in <span class="math inline">\(\mathbb{R}^C\)</span> taking values in the probability simplex <span class="math inline">\(\Delta^C\)</span>.</p>
+</section>
+<section id="decision-theoretic-context" class="level1">
+<h1>Decision-Theoretic Context</h1>
+<p>Our goal is to find the optimal partition of the outcome set <span class="math inline">\(\mathcal{Z}\)</span> such that the net loss of quality of decision-making is counterbalanced by the decrease in the computational resources required. We aim to hide information that is not required in the decision making process. We consider the <strong>H-entropy</strong></p>
+<p><span class="math display">\[
+H_l(p) = \inf_{a \in A} \mathbb{E}_{p(z|x)}l(\mathcal{Z}, a) = \min_{a \in A}(Lp)
+\]</span></p>
+<p>This is the “least possible expected loss” aka “Bayes optimal loss”. We can quantify the increase in the H-entropy (suboptimality gap) caused by partitioning the support <span class="math inline">\(\mathcal{Z}\)</span>:</p>
+<p><span class="math display">\[
+\delta(q,p) = H_{\tilde{l}}(q) - H_l(p)
+\]</span></p>
+<p>We achieve this by noticing that every partition is a culmination of <em>simplex folds</em>.</p>
+<section id="fold-a-simplex" class="level2">
+<h2 class="anchored" data-anchor-id="fold-a-simplex">Fold a Simplex</h2>
+<p>Fold <span class="math inline">\(f_{i \to j}\)</span> “buckets” <span class="math inline">\(z_i\)</span> and <span class="math inline">\(z_j\)</span> together reducing the dimension of the support <span class="math inline">\(\mathcal{Z}\)</span>.</p>
+</section>
+<section id="computing-decision-losses-on-sets" class="level2">
+<h2 class="anchored" data-anchor-id="computing-decision-losses-on-sets">Computing Decision Losses on Sets</h2>
+<p>How is the loss function calculated after we consider the abstraction? Well, naturally, we consider the worst-case extension!</p>
+<p><span class="math display">\[
+\tilde{l}(S, a) = \max_{z \in S} l(z, a), \ S \subset \mathcal{Z}
+\]</span></p>
+<p>It is clear that folding increases H-entropy.</p>
+</section>
+</section>
+<section id="objective" class="level1">
+<h1>Objective</h1>
+<p>Now our goal is to, at each step, find the optimal simplex fold. We find</p>
+<p><span class="math display">\[
+i^*, j^* = \arg \min_{i,j, i\neq j} L(i, j, L)
+\]</span></p>
+<p>We can achieve this by three ways:</p>
+<ul>
+<li><p>Integral Objective</p></li>
+<li><p>Max-Increase Objective</p></li>
+<li><p>Vertex Objective</p></li>
+</ul>
+<section id="integral-objective" class="level2">
+<h2 class="anchored" data-anchor-id="integral-objective">Integral Objective</h2>
+<p>Goal: Use the average amount of suboptimality gap over the probability simplex as the Objective to find ideal abstractions.</p>
+<p><span class="math display">\[L = \frac 1 \lambda \int_{\Delta^C} [H_{\tilde{l}}(f_{i \to j}(\mathbf{p})) - H_l(p) \text{d}\mathbf{p}]\]</span></p>
+<p>To calculate this computationally efficiently, we perform a monte-carlo estimate. We pick <span class="math inline">\(N\)</span> points on the probability simplex and find the average of the suboptimality gap over those <span class="math inline">\(N\)</span> points.</p>
+
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>
+Code
+</th>
+<th>
+Purpose
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>generate_points_in_simplex(N,c)</code>
+</td>
+<td>
+Generates <span class="math inline">(N)</span> random points on the probability simplex <span class="math inline">(^c)</span>.
+</td>
+</tr>
+<tr class="even">
+<td>
+<code>fold(p, L, i, j)</code>
+</td>
+<td>
+Folds <span class="math inline">( )</span> and <span class="math inline">( )</span> by deleting <span class="math inline">((i,j))</span>, column in <span class="math inline">(L)</span> and row in <span class="math inline">(p)</span>, and assimilating it in <span class="math inline">((i,j))</span> row in <span class="math inline">(L)</span> and column <span class="math inline">(p)</span>.
+</td>
+</tr>
+<tr class="odd">
+<td>
+<p>
+<code>H_p = np.einsum(“ac,cb-&gt;ab”, L, p).min(axis = 0)</code>
+</p>
+<p>
+<code>H_q = np.einsum(“ac,cb-&gt;ab”, L, q).min(axis = 0)</code>
+</p>
+</td>
+<td>
+<strong>einsum(“ac, cb-&gt;ab”)</strong> performs <span class="math inline">(Lp)</span> and <span class="math inline">(Lq)</span> respectively, and finds the minimum of all the rows.
+</td>
+</tr>
+<tr class="even">
+<td>
+<code>i_fold, j_fold = np.unravel_index(np.argmin(M), M.shape</code>
+</td>
+<td>
+<strong>unravel_index</strong> “opens” the array and argmin finds the index with the associate minimum value.
+</td>
+</tr>
+</tbody>
+
+</table>
+</section>
+<section id="max-increase-objective" class="level2">
+<h2 class="anchored" data-anchor-id="max-increase-objective">Max-Increase Objective</h2>
+<p>Goal: Use the max-increase suboptimality gap over the probability simplex as the Objective to find ideal abstractions.</p>
+<p><span class="math display">\[
+L = \sup_{p \in \Delta^C}[H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})] = \max_{p \in \Delta^C} [H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})]
+\]</span></p>
+<p>To calculate this, we notice that</p>
+<p><span class="math display">\[
+L = \max_{p \in \Delta^C} \left[\underbrace{\min_{a}(\tilde{L}q)}_{\text{concave}} - \underbrace{\min_{a}(Lp)}_{\text{concave}}\right] = \max_{p \in \Delta^C} \left[Q(q) - P(p)\right]
+\]</span></p>
+<p><span class="math inline">\(L\)</span> is a difference of concave function, and thus we use an algorithm to solve problems in the class <em>difference of convex or concave problems.</em></p>
+<p>What do we do? At every point in the algorithm, we start with a <span class="math inline">\(p^k\)</span> (starting with <span class="math inline">\(0\)</span>), linearize <span class="math inline">\(P\)</span> around <span class="math inline">\(p^k\)</span> and then optimize <span class="math inline">\(L\)</span> around that linearization of <span class="math inline">\(P\)</span>. Using this we find the next point <span class="math inline">\(p^{k+1}\)</span>, and keep repeating this process until the absolute change in the suboptimality gap is below the convergence threshold <span class="math inline">\(\delta\)</span> (<code>self.delta</code>).</p>
+<p>How is <span class="math inline">\(P\)</span> linearized? Well, for a <span class="math inline">\(p^k\)</span> we find the subgradient <span class="math inline">\(g_k\)</span> of <span class="math inline">\(\min_{a}(Lp)\)</span>.</p>
+<p><span class="math display">\[
+g_k = \frac{1}{\gamma} L_m^T
+\]</span></p>
+<p>where <span class="math inline">\(m = \arg \min_{a} (Lp)\)</span> and <span class="math inline">\(\gamma\)</span> is the slowdown parameter of the objective subgradient (<code>self.gamma</code>).</p>
+
+<table class="table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>
+Code
+</th>
+<th>
+Purpose
+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>X(self,i,j)</code>
+</td>
+<td>
+This is an alternate implementation to generate <span class="math inline">()</span> as <span class="math inline">( = X)</span>. Here, <span class="math inline">(X = I + E_{ij} - E_{jj})</span>. We use this because this is more efficient and reusable.
+</td>
+</tr>
+<tr class="even">
+<td>
+<code>Lt(self,i,j)</code>
+</td>
+<td>
+To generate <span class="math inline">()</span> from <span class="math inline">(L)</span> . Largely the same as the <strong>Integral Objective</strong> but we take care of the dimensions of <span class="math inline">(q)</span> as that is implemented slightly differently.
+</td>
+</tr>
+<tr class="odd">
+<td>
+<code>objectiveFunction(self, p, pk, i, j)</code>
+</td>
+<td>
+Defines the suboptimality gap objective function after the linearization of <span class="math inline">(P)</span> around <span class="math inline">(p^k)</span>.
+</td>
+</tr>
+<tr class="even">
+<td>
+<code>suboptimalityGap(self, p, i, j)</code>
+</td>
+<td>
+Defines the suboptimality gap objective function.
+</td>
+</tr>
+<tr class="odd">
+<td>
+<code>linear_optimizer(self, pk, i, j)</code>
+</td>
+<td>
+This function performs step-by-step optimization of the linearized <code>objectiveFunction</code> .
+</td>
+</tr>
+<tr class="even">
+<td>
+<code>DCOptimizer(self, i, j)</code>
+</td>
+<td>
+Performs the complete optimization and stops when change in the suboptimality gap dips below the convergence threshold <code>self.delta</code> .
+</td>
+</tr>
+<tr class="odd">
+<td>
+<p>
+<code>probability_constraint(self, p)</code>
+</p>
+<p>
+<code>bounds = [(0,1) for _ in range(self.c)]</code>
+</p>
+<p>
+<code>constraints = ({‘type’:‘eq’, ‘fun’: self.probability_constraint})</code>
+</p>
+</td>
+<td>
+Defines the constraints for <code>scipy.optimize</code> .
+</td>
+</tr>
+</tbody>
+
+</table>
+</section>
+<section id="vertex-objective" class="level2">
+<h2 class="anchored" data-anchor-id="vertex-objective">Vertex Objective</h2>
+<p>Goal: Only care about the vertices of <span class="math inline">\(\Delta^c\)</span> to find suboptimality gap.</p>
+<p><span class="math display">\[
+\mathcal{L_{i,j}} = \left[H_l(p^{(i)}) - H_l(p^{(j)})\right] = [\min_a(L_i) - \min_a(L_i)]
+\]</span></p>
+<p><span class="math display">\[
+i^*, j^* = \min_{i \neq j} L_{i,j}
+\]</span></p>
+<p>The implementation is fairly trivial to understand.</p>
+</section>
+</section>
+<section id="end." class="level1">
+<h1>End.</h1>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
