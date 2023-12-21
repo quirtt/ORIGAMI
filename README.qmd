@@ -1,0 +1,165 @@
+# Ideal Abstractions for Decision-Focused Learning
+
+This paper is in the context of Reinforcement Learning. The goal of the paper is to perform **ideal** simplifying abstractions by realizing the utility structure of the decisions.
+
+Modern machine learning systems deal with vast amounts of complex data, like extremely detailed images or graphs with billions of nodes. How can machine learning methods effectively align with real-world decision-making based on such large-scale data? Moreover, how can one manage domains where the problem's complexity makes it challenging to collect sufficient data for predictive model to comprehend the full scope?
+
+An agent observes $x$, and given a model $p_\theta(x, z)$ of $p(x,z)$, returns an action $a$ following the policy $\pi(\mathcal{Z})$. Domain knowledge about the task is represented as a loss function $l:\mathcal{Z} \times A \to \mathbb{R}$ measuring the cost of performing action $a$ when the outcome is $x$. The loss function can be represented as $L_{ij} = \mathcal{l}(z_i, a_j)$. Further, $p = \{p(z_i|x)\}_i$ is a vector in $\mathbb{R}^C$ taking values in the probability simplex $\Delta^C$.
+
+# Decision-Theoretic Context
+
+Our goal is to find the optimal partition of the outcome set $\mathcal{Z}$ such that the net loss of quality of decision-making is counterbalanced by the decrease in the computational resources required. We aim to hide information that is not required in the decision making process. We consider the **H-entropy**
+
+$$
+H_l(p) = \inf_{a \in A} \mathbb{E}_{p(z|x)}\mathcal{l}(\mathcal{Z}, a) = \min_{a \in A}(Lp)
+$$
+
+This is the "least possible expected loss" aka "Bayes optimal loss". We can quantify the increase in the H-entropy (suboptimality gap) caused by partitioning the support $\mathcal{Z}$:
+
+$$
+\delta(q,p) = H_{\tilde{l}}(q) - H_l(p) 
+$$
+
+We achieve this by noticing that every partition is a culmination of *simplex folds*.
+
+## Fold a Simplex
+
+Fold $f_{i \to j}$ "buckets" $z_i$ and $z_j$ together reducing the dimension of the support $\mathcal{Z}$.
+
+## Computing Decision Losses on Sets
+
+How is the loss function calculated after we consider the abstraction? Well, naturally, we consider the worst-case extension!
+
+$$
+\tilde{\mathcal{l}}(S, a) = \max_{z \in S} \mathcal{l}(z, a), \ S \subset \mathcal{Z}
+$$
+
+It is clear that folding increases H-entropy.
+
+# Objective
+
+Now our goal is to, at each step, find the optimal simplex fold. We find
+
+$$
+i^*, j^* = \arg \min_{i,j, i\neq j} \mathcal{L}(i, j, L)
+$$
+
+We can achieve this by three ways:
+
+-   Integral Objective
+
+-   Max-Increase Objective
+
+-   Vertex Objective
+
+## Integral Objective
+
+Goal: Use the average amount of suboptimality gap over the probability simplex as the Objective to find ideal abstractions.
+
+$$\mathcal{L} = \frac 1 \lambda \int_{\Delta^C} [H_{\tilde{l}}(f_{i \to j}(\mathbf{p})) - H_l(p) \text{d}\mathbf{p}]$$
+
+To calculate this computationally efficiently, we perform a monte-carlo estimate. We pick $N$ points on the probability simplex and find the average of the suboptimality gap over those $N$ points.
+
++----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Code                                                     | Purpose                                                                                                                                                                                        |
++==========================================================+================================================================================================================================================================================================+
+| ``` python                                               | Generates $N$ random points on the probability simplex $\Delta^c$.                                                                                                                             |
+| generate_points_in_simplex(N,c)                          |                                                                                                                                                                                                |
+| ```                                                      |                                                                                                                                                                                                |
++----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                               | Folds $\mathbf{p} \to \mathbf{q}$ and $\mathbf{L} \to \mathbf{\tilde{L}}$ by deleting $\max(i,j)$, column in $L$ and row in $p$, and assimilating it in $\min(i,j)$ row in $L$ and column $p$. |
+| fold(p, L, i, j)                                         |                                                                                                                                                                                                |
+| ```                                                      |                                                                                                                                                                                                |
++----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                               | **einsum("ac, cb-\>ab")** performs $Lp$ and $Lq$ respectively, and finds the minimum of all the rows.                                                                                          |
+| H_p = np.einsum("ac,cb->ab", L, p).min(axis = 0)         |                                                                                                                                                                                                |
+| ```                                                      |                                                                                                                                                                                                |
+|                                                          |                                                                                                                                                                                                |
+| ``` python                                               |                                                                                                                                                                                                |
+| H_q = np.einsum("ac,cb->ab", L, q).min(axis = 0)         |                                                                                                                                                                                                |
+| ```                                                      |                                                                                                                                                                                                |
++----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                               | **unravel_index** "opens" the array and argmin finds the index with the associate minimum value.                                                                                               |
+| i_fold, j_fold = np.unravel_index(np.argmin(M), M.shape) |                                                                                                                                                                                                |
+| ```                                                      |                                                                                                                                                                                                |
++----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+## Max-Increase Objective
+
+Goal: Use the max-increase suboptimality gap over the probability simplex as the Objective to find ideal abstractions.
+
+$$
+\mathcal{L} = \sup_{p \in \Delta^C}[H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})] = \max_{p \in \Delta^C} [H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})]
+$$
+
+To calculate this, we notice that
+
+$$
+\mathcal{L} = \max_{p \in \Delta^C} \left[\underbrace{\min_{a}(\tilde{L}q)}_{\text{concave}} - \underbrace{\min_{a}(Lp)}_{\text{concave}}\right] = \max_{p \in \Delta^C} \left[Q(q) - P(p)\right]
+$$
+
+$\mathcal{L}$ is a difference of concave function, and thus we use an algorithm to solve problems in the class *difference of convex or concave problems.*
+
+What do we do? At every point in the algorithm, we start with a $p^k$ (starting with $0$), linearize $P$ around $p^k$ and then optimize $\mathcal{L}$ around that linearization of $P$. Using this we find the next point $p^{k+1}$, and keep repeating this process until the absolute change in the suboptimality gap is below the convergence threshold $\delta$ (`self.delta`).
+
+How is $P$ linearized? Well, for a $p^k$ we find the subgradient $g_k$ of $\min_{a}(Lp)$.
+
+$$
+g_k = \frac{1}{\gamma} L_m^T
+$$
+
+where $m = \arg \min_{a} (Lp)$ and $\gamma$ is the slowdown parameter of the objective subgradient (`self.gamma`).
+
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Code                                                              | Purpose                                                                                                                                                                                |
++===================================================================+========================================================================================================================================================================================+
+| ``` python                                                        | This is an alternate implementation to generate $\mathbf{q}$ as $\mathbf{q} = X\mathbf{p}$. Here, $X = I + E_{ij} - E_{jj}$. We use this because this is more efficient and reusable.  |
+| X(self,i,j)                                                       |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                                        | To generate $\tilde{L}$ from $L$ . Largely the same as the **Integral Objective** but we take care of the dimensions of $q$ as that is implemented slightly differently.               |
+| Lt(self,i,j)                                                      |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                                        | Defines the suboptimality gap objective function after the linearization of $P$ around $p^k$.                                                                                          |
+| objectiveFunction(self, p, pk, i, j)                              |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                                        | Defines the suboptimality gap objective function.                                                                                                                                      |
+| suboptimalityGap(self, p, i, j)                                   |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                                        | This function performs step-by-step optimization of the linearized `objectiveFunction` .                                                                                               |
+| linear_optimizer(self, pk, i, j)                                  |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                                        | Performs the complete optimization and stops when change in the suboptimality gap dips below the convergence threshold `self.delta` .                                                  |
+| DCOptimizer(self, i, j)                                           |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ``` python                                                        | Defines the constraints for `scipy.optimize` .                                                                                                                                         |
+| probability_constraint(self, p)                                   |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
+|                                                                   |                                                                                                                                                                                        |
+| ``` python                                                        |                                                                                                                                                                                        |
+| bounds = [(0,1) for _ in range(self.c)]                           |                                                                                                                                                                                        |
+|                                                                   |                                                                                                                                                                                        |
+| constraints = ({'type':'eq', 'fun': self.probability_constraint}) |                                                                                                                                                                                        |
+| ```                                                               |                                                                                                                                                                                        |
++-------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+## Vertex Objective
+
+Goal: Only care about the vertices of $\Delta^c$ to find suboptimality gap.
+
+$$
+\mathcal{L_{i,j}} = \left[H_l(p^{(i)}) - H_l(p^{(j)})\right] = [\min_a(L_i) - \min_a(L_i)]
+$$
+
+$$
+i^*, j^* = \min_{i \neq j} \mathcal{L}_{i,j}
+$$
+
+The implementation is fairly trivial to understand.
+
+# End.

@@ -12,7 +12,7 @@ class Max_Increase:
     def X(self,i,j):
         # <- q = Xp ->
         X = np.eye(self.c)
-        E_ij,E_jj = (np.zeros((c,c)), np.zeros((c,c)))
+        E_ij,E_jj = (np.zeros((self.c,self.c)), np.zeros((self.c,self.c)))
         E_ij[i, j] = 1
         E_jj[j, j] = 1
 
