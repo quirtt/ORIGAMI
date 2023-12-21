@@ -1,6 +1,4 @@
 # Ideal Abstractions for Decisions-Focused Learning
-Himadri Mandal
-2023-12-22
 
 - [Decision-Theoretic Context](#decision-theoretic-context)
   - [Fold a Simplex](#fold-a-simplex)

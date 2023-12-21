@@ -1,7 +1,5 @@
 ---
 title: "Ideal Abstractions for Decisions-Focused Learning"
-author: "Himadri Mandal"
-date: "2023-12-22"
 format: 
     gfm: 
         html-math-method: mathjax
