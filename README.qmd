@@ -1,5 +1,13 @@
-# Ideal Abstractions for Decision-Focused Learning
-
+---
+title: "Ideal Abstractions for Decisions-Focused Learning"
+author: "Himadri Mandal"
+date: "2023-12-22"
+format: 
+    gfm: 
+        html-math-method: webtex
+        toc: true
+editor: visual
+---
 This paper is in the context of Reinforcement Learning. The goal of the paper is to perform **ideal** simplifying abstractions by realizing the utility structure of the decisions.
 
 Modern machine learning systems deal with vast amounts of complex data, like extremely detailed images or graphs with billions of nodes. How can machine learning methods effectively align with real-world decision-making based on such large-scale data? Moreover, how can one manage domains where the problem's complexity makes it challenging to collect sufficient data for predictive model to comprehend the full scope?
