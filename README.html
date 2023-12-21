@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>readme</title>
+<title>Ideal Abstractions for Decisions-Focused Learning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -45,28 +45,40 @@ ul.task-list li input[type="checkbox"] {
 
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Ideal Abstractions for Decisions-Focused Learning</h1>
+</div>
 
 
-<section id="ideal-abstractions-for-decisions-focused-learning" class="level1">
-<h1>Ideal Abstractions for Decisions-Focused Learning</h1>
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
 <ul>
-<li><a href="#decision-theoretic-context">Decision-Theoretic Context</a>
+<li><a href="#decision-theoretic-context" id="toc-decision-theoretic-context">Decision-Theoretic Context</a>
 <ul>
-<li><a href="#fold-a-simplex">Fold a Simplex</a></li>
-<li><a href="#computing-decision-losses-on-sets">Computing Decision Losses on Sets</a></li>
+<li><a href="#fold-a-simplex" id="toc-fold-a-simplex">Fold a Simplex</a></li>
+<li><a href="#computing-decision-losses-on-sets" id="toc-computing-decision-losses-on-sets">Computing Decision Losses on Sets</a></li>
 </ul></li>
-<li><a href="#objective">Objective</a>
+<li><a href="#objective" id="toc-objective">Objective</a>
 <ul>
-<li><a href="#integral-objective">Integral Objective</a></li>
-<li><a href="#max-increase-objective">Max-Increase Objective</a></li>
-<li><a href="#vertex-objective">Vertex Objective</a></li>
+<li><a href="#integral-objective" id="toc-integral-objective">Integral Objective</a></li>
+<li><a href="#max-increase-objective" id="toc-max-increase-objective">Max-Increase Objective</a></li>
+<li><a href="#vertex-objective" id="toc-vertex-objective">Vertex Objective</a></li>
 </ul></li>
-<li><a href="#end.">End.</a></li>
+<li><a href="#end." id="toc-end.">End.</a></li>
 </ul>
 <p>This paper is in the context of Reinforcement Learning. The goal of the paper is to perform <strong>ideal</strong> simplifying abstractions by realizing the utility structure of the decisions.</p>
-<p>Modern machine learning systems deal with vast amounts of complex data, like extremely detailed images or graphs with billions of nodes. How can machine learning methods effectively align with real-world decision-making based on such large-scale data? Moreover, how can one manage domains where the problem’s complexity makes it challenging to collect sufficient data for predictive model to comprehend the full scope?</p>
+<p>Modern machine learning systems deal with vast amounts of complex data, like extremely detailed images or graphs with billions of nodes. How can machine learning methods effectively align with pythonreal-world decision-making based on such large-scale data? Moreover, how can one manage domains where the problem’s complexity makes it challenging to collect sufficient data for predictive model to comprehend the full scope?</p>
 <p>An agent observes <span class="math inline">\(x\)</span>, and given a model <span class="math inline">\(p_\theta(x, z)\)</span> of <span class="math inline">\(p(x,z)\)</span>, returns an action <span class="math inline">\(a\)</span> following the policy <span class="math inline">\(\pi(\mathcal{Z})\)</span>. Domain knowledge about the task is represented as a loss function <span class="math inline">\(l:\mathcal{Z} \times A \to \mathbb{R}\)</span> measuring the cost of performing action <span class="math inline">\(a\)</span> when the outcome is <span class="math inline">\(x\)</span>. The loss function can be represented as <span class="math inline">\(L_{ij} = l(z_i, a_j)\)</span>. Further, <span class="math inline">\(p = \{p(z_i|x)\}_i\)</span> is a vector in <span class="math inline">\(\mathbb{R}^C\)</span> taking values in the probability simplex <span class="math inline">\(\Delta^C\)</span>.</p>
-</section>
 <section id="decision-theoretic-context" class="level1">
 <h1>Decision-Theoretic Context</h1>
 <p>Our goal is to find the optimal partition of the outcome set <span class="math inline">\(\mathcal{Z}\)</span> such that the net loss of quality of decision-making is counterbalanced by the decrease in the computational resources required. We aim to hide information that is not required in the decision making process. We consider the <strong>H-entropy</strong></p>
@@ -108,62 +120,36 @@ i^{\star}, j^{\star} = \arg \min_{i,j, i\neq j} L(i, j, L)
 <p>Goal: Use the average amount of suboptimality gap over the probability simplex as the Objective to find ideal abstractions.</p>
 <p><span class="math display">\[L = \frac 1 \lambda \int_{\Delta^C} [H_{\tilde{l}}(f_{i \to j}(\mathbf{p})) - H_l(p) \text{d}\mathbf{p}]\]</span></p>
 <p>To calculate this computationally efficiently, we perform a monte-carlo estimate. We pick <span class="math inline">\(N\)</span> points on the probability simplex and find the average of the suboptimality gap over those <span class="math inline">\(N\)</span> points.</p>
-
 <table class="table">
 <colgroup>
 <col style="width: 23%">
-<col style="width: 76%">
+<col style="width: 75%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>
-Code
-</th>
-<th>
-Purpose
-</th>
+<th>Code</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>
-<code>generate_points_in_simplex(N,c)</code>
-</td>
-<td>
-Generates <span class="math inline">(N)</span> random points on the probability simplex <span class="math inline">(^c)</span>.
-</td>
+<td><code>gene rate_points_in _simplex(N,c)</code></td>
+<td>Generates <span class="math inline">\(N\)</span> random points on the probability simplex <span class="math inline">\(\Delta^c\)</span>.</td>
 </tr>
 <tr class="even">
-<td>
-<code>fold(p, L, i, j)</code>
-</td>
-<td>
-Folds <span class="math inline">( )</span> and <span class="math inline">( )</span> by deleting <span class="math inline">((i,j))</span>, column in <span class="math inline">(L)</span> and row in <span class="math inline">(p)</span>, and assimilating it in <span class="math inline">((i,j))</span> row in <span class="math inline">(L)</span> and column <span class="math inline">(p)</span>.
-</td>
+<td><code>fol d(p, L, i, j)</code></td>
+<td>Folds <span class="math inline">\(\mathbf{p} \to \mathbf{q}\)</span> and <span class="math inline">\(\mathbf{L} \to \mathbf{\tilde{L}}\)</span> by deleting <span class="math inline">\(\max(i,j)\)</span>, column in <span class="math inline">\(L\)</span> and row in <span class="math inline">\(p\)</span>, and assimilating it in <span class="math inline">\(\min(i,j)\)</span> row in <span class="math inline">\(L\)</span> and column <span class="math inline">\(p\)</span>.</td>
 </tr>
 <tr class="odd">
-<td>
-<p>
-<code>H_p = np.einsum(“ac,cb-&gt;ab”, L, p).min(axis = 0)</code>
-</p>
-<p>
-<code>H_q = np.einsum(“ac,cb-&gt;ab”, L, q).min(axis = 0)</code>
-</p>
-</td>
-<td>
-<strong>einsum(“ac, cb-&gt;ab”)</strong> performs <span class="math inline">(Lp)</span> and <span class="math inline">(Lq)</span> respectively, and finds the minimum of all the rows.
-</td>
+<td><p><code>H_p = n p.einsum("ac,c b-&gt;ab", L, p). min(axis = 0)</code></p>
+<p><code>H_q = n p.einsum("ac,c b-&gt;ab", L, q). min(axis = 0)</code></p></td>
+<td><strong>einsum(“ac, cb-&gt;ab”)</strong> performs <span class="math inline">\(Lp\)</span> and <span class="math inline">\(Lq\)</span> respectively, and finds the minimum of all the rows.</td>
 </tr>
 <tr class="even">
-<td>
-<code>i_fold, j_fold = np.unravel_index(np.argmin(M), M.shape</code>
-</td>
-<td>
-<strong>unravel_index</strong> “opens” the array and argmin finds the index with the associate minimum value.
-</td>
+<td><code>i_fold, j_fold  = np.unravel_ index(np.argmi n(M), M.shape</code></td>
+<td><strong>unravel_index</strong> “opens” the array and argmin finds the index with the associate minimum value.</td>
 </tr>
 </tbody>
-
 </table>
 </section>
 <section id="max-increase-objective" class="level2">
@@ -183,89 +169,49 @@ L = \max_{p \in \Delta^C} \left[\underbrace{\min_{a}(\tilde{L}q)}_{\text{concave
 g_k = \frac{1}{\gamma} L_m^T
 \]</span></p>
 <p>where <span class="math inline">\(m = \arg \min_{a} (Lp)\)</span> and <span class="math inline">\(\gamma\)</span> is the slowdown parameter of the objective subgradient (<code>self.gamma</code>).</p>
-
 <table class="table">
 <colgroup>
-<col style="width: 27%">
+<col style="width: 26%">
 <col style="width: 72%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>
-Code
-</th>
-<th>
-Purpose
-</th>
+<th>Code</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>
-<code>X(self,i,j)</code>
-</td>
-<td>
-This is an alternate implementation to generate <span class="math inline">()</span> as <span class="math inline">( = X)</span>. Here, <span class="math inline">(X = I + E_{ij} - E_{jj})</span>. We use this because this is more efficient and reusable.
-</td>
+<td><code>X(self,i,j)</code></td>
+<td>This is an alternate implementation to generate <span class="math inline">\(\mathbf{q}\)</span> as <span class="math inline">\(\mathbf{q} = X\mathbf{p}\)</span>. Here, <span class="math inline">\(X = I + E_{ij} - E_{jj}\)</span>. We use this because this is more efficient and reusable.</td>
 </tr>
 <tr class="even">
-<td>
-<code>Lt(self,i,j)</code>
-</td>
-<td>
-To generate <span class="math inline">()</span> from <span class="math inline">(L)</span> . Largely the same as the <strong>Integral Objective</strong> but we take care of the dimensions of <span class="math inline">(q)</span> as that is implemented slightly differently.
-</td>
+<td><code>Lt(self,i,j)</code></td>
+<td>To generate <span class="math inline">\(\tilde{L}\)</span> from <span class="math inline">\(L\)</span> . Largely the same as the <strong>Integral Objective</strong> but we take care of the dimensions of <span class="math inline">\(q\)</span> as that is implemented slightly differently.</td>
 </tr>
 <tr class="odd">
-<td>
-<code>objectiveFunction(self, p, pk, i, j)</code>
-</td>
-<td>
-Defines the suboptimality gap objective function after the linearization of <span class="math inline">(P)</span> around <span class="math inline">(p^k)</span>.
-</td>
+<td><code>objec tiveFunction(sel f, p, pk, i, j)</code></td>
+<td>Defines the suboptimality gap objective function after the linearization of <span class="math inline">\(P\)</span> around <span class="math inline">\(p^k\)</span>.</td>
 </tr>
 <tr class="even">
-<td>
-<code>suboptimalityGap(self, p, i, j)</code>
-</td>
-<td>
-Defines the suboptimality gap objective function.
-</td>
+<td><code>suboptimalityGap (self, p, i, j)</code></td>
+<td>Defines the suboptimality gap objective function.</td>
 </tr>
 <tr class="odd">
-<td>
-<code>linear_optimizer(self, pk, i, j)</code>
-</td>
-<td>
-This function performs step-by-step optimization of the linearized <code>objectiveFunction</code> .
-</td>
+<td><code>l inear_optimizer( self, pk, i, j)</code></td>
+<td>This function performs step-by-step optimization of the linearized <code>objectiveFunction</code> .</td>
 </tr>
 <tr class="even">
-<td>
-<code>DCOptimizer(self, i, j)</code>
-</td>
-<td>
-Performs the complete optimization and stops when change in the suboptimality gap dips below the convergence threshold <code>self.delta</code> .
-</td>
+<td><code>DCOptimi zer(self, i, j)</code></td>
+<td>Performs the complete optimization and stops when change in the suboptimality gap dips below the convergence threshold <code>self.delta</code> .</td>
 </tr>
 <tr class="odd">
-<td>
-<p>
-<code>probability_constraint(self, p)</code>
-</p>
-<p>
-<code>bounds = [(0,1) for _ in range(self.c)]</code>
-</p>
-<p>
-<code>constraints = ({‘type’:‘eq’, ‘fun’: self.probability_constraint})</code>
-</p>
-</td>
-<td>
-Defines the constraints for <code>scipy.optimize</code> .
-</td>
+<td><p><code>probability_cons traint(self, p)</code></p>
+<p><code>bounds =  [(0,1) for _ in  range(self.c)]</code></p>
+<p><code>co nstraints = ({'t ype':'eq', 'fun' : self.probabili ty_constraint})</code></p></td>
+<td>Defines the constraints for <code>scipy.optimize</code> .</td>
 </tr>
 </tbody>
-
 </table>
 </section>
 <section id="vertex-objective" class="level2">

@@ -1,14 +1,21 @@
-# Ideal Abstractions for Decisions-Focused Learning
+---
+editor: visual
+title: Ideal Abstractions for Decisions-Focused Learning
+toc-title: Table of contents
+---
 
-- [Decision-Theoretic Context](#decision-theoretic-context)
-  - [Fold a Simplex](#fold-a-simplex)
-  - [Computing Decision Losses on
-    Sets](#computing-decision-losses-on-sets)
-- [Objective](#objective)
-  - [Integral Objective](#integral-objective)
-  - [Max-Increase Objective](#max-increase-objective)
-  - [Vertex Objective](#vertex-objective)
-- [End.](#end.)
+-   [Decision-Theoretic
+    Context](#decision-theoretic-context){#toc-decision-theoretic-context}
+    -   [Fold a Simplex](#fold-a-simplex){#toc-fold-a-simplex}
+    -   [Computing Decision Losses on
+        Sets](#computing-decision-losses-on-sets){#toc-computing-decision-losses-on-sets}
+-   [Objective](#objective){#toc-objective}
+    -   [Integral
+        Objective](#integral-objective){#toc-integral-objective}
+    -   [Max-Increase
+        Objective](#max-increase-objective){#toc-max-increase-objective}
+    -   [Vertex Objective](#vertex-objective){#toc-vertex-objective}
+-   [End.](#end.){#toc-end.}
 
 This paper is in the context of Reinforcement Learning. The goal of the
 paper is to perform **ideal** simplifying abstractions by realizing the
@@ -16,9 +23,9 @@ utility structure of the decisions.
 
 Modern machine learning systems deal with vast amounts of complex data,
 like extremely detailed images or graphs with billions of nodes. How can
-machine learning methods effectively align with real-world
+machine learning methods effectively align with pythonreal-world
 decision-making based on such large-scale data? Moreover, how can one
-manage domains where the problem’s complexity makes it challenging to
+manage domains where the problem's complexity makes it challenging to
 collect sufficient data for predictive model to comprehend the full
 scope?
 
@@ -42,7 +49,7 @@ $$
 H_l(p) = \inf_{a \in A} \mathbb{E}_{p(z|x)}l(\mathcal{Z}, a) = \min_{a \in A}(Lp)
 $$
 
-This is the “least possible expected loss” aka “Bayes optimal loss”. We
+This is the "least possible expected loss" aka "Bayes optimal loss". We
 can quantify the increase in the H-entropy (suboptimality gap) caused by
 partitioning the support $\mathcal{Z}$:
 
@@ -55,7 +62,7 @@ We achieve this by noticing that every partition is a culmination of
 
 ## Fold a Simplex
 
-Fold $f_{i \to j}$ “buckets” $z_i$ and $z_j$ together reducing the
+Fold $f_{i \to j}$ "buckets" $z_i$ and $z_j$ together reducing the
 dimension of the support $\mathcal{Z}$.
 
 ## Computing Decision Losses on Sets
@@ -79,11 +86,11 @@ $$
 
 We can achieve this by three ways:
 
-- Integral Objective
+-   Integral Objective
 
-- Max-Increase Objective
+-   Max-Increase Objective
 
-- Vertex Objective
+-   Vertex Objective
 
 ## Integral Objective
 
@@ -96,51 +103,35 @@ To calculate this computationally efficiently, we perform a monte-carlo
 estimate. We pick $N$ points on the probability simplex and find the
 average of the suboptimality gap over those $N$ points.
 
-<table>
-<colgroup>
-<col style="width: 23%" />
-<col style="width: 76%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Code</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>generate_points_in_simplex(N,c)</code></td>
-<td>Generates <span class="math inline">\(N\)</span> random points on
-the probability simplex <span
-class="math inline">\(\Delta^c\)</span>.</td>
-</tr>
-<tr class="even">
-<td><code>fold(p, L, i, j)</code></td>
-<td>Folds <span class="math inline">\(\mathbf{p} \to \mathbf{q}\)</span>
-and <span class="math inline">\(\mathbf{L} \to
-\mathbf{\tilde{L}}\)</span> by deleting <span
-class="math inline">\(\max(i,j)\)</span>, column in <span
-class="math inline">\(L\)</span> and row in <span
-class="math inline">\(p\)</span>, and assimilating it in <span
-class="math inline">\(\min(i,j)\)</span> row in <span
-class="math inline">\(L\)</span> and column <span
-class="math inline">\(p\)</span>.</td>
-</tr>
-<tr class="odd">
-<td><p><code>H_p = np.einsum("ac,cb-&gt;ab", L, p).min(axis = 0)</code></p>
-<p><code>H_q = np.einsum("ac,cb-&gt;ab", L, q).min(axis = 0)</code></p></td>
-<td><strong>einsum(“ac, cb-&gt;ab”)</strong> performs <span
-class="math inline">\(Lp\)</span> and <span
-class="math inline">\(Lq\)</span> respectively, and finds the minimum of
-all the rows.</td>
-</tr>
-<tr class="even">
-<td><code>i_fold, j_fold = np.unravel_index(np.argmin(M), M.shape</code></td>
-<td><strong>unravel_index</strong> “opens” the array and argmin finds
-the index with the associate minimum value.</td>
-</tr>
-</tbody>
-</table>
++----------------+-----------------------------------------------------+
+| Code           | Purpose                                             |
++================+=====================================================+
+| `gene          | Generates $N$ random points on the probability      |
+| rate_points_in | simplex $\Delta^c$.                                 |
+| _simplex(N,c)` |                                                     |
++----------------+-----------------------------------------------------+
+| `fol           | Folds $\mathbf{p} \to \mathbf{q}$ and               |
+| d(p, L, i, j)` | $\mathbf{L} \to \mathbf{\tilde{L}}$ by deleting     |
+|                | $\max(i,j)$, column in $L$ and row in $p$, and      |
+|                | assimilating it in $\min(i,j)$ row in $L$ and       |
+|                | column $p$.                                         |
++----------------+-----------------------------------------------------+
+| `H_p = n       | **einsum("ac, cb-\>ab")** performs $Lp$ and $Lq$    |
+| p.einsum("ac,c | respectively, and finds the minimum of all the      |
+| b->ab", L, p). | rows.                                               |
+| min(axis = 0)` |                                                     |
+|                |                                                     |
+| `H_q = n       |                                                     |
+| p.einsum("ac,c |                                                     |
+| b->ab", L, q). |                                                     |
+| min(axis = 0)` |                                                     |
++----------------+-----------------------------------------------------+
+| `              | **unravel_index** "opens" the array and argmin      |
+| i_fold, j_fold | finds the index with the associate minimum value.   |
+|  = np.unravel_ |                                                     |
+| index(np.argmi |                                                     |
+| n(M), M.shape` |                                                     |
++----------------+-----------------------------------------------------+
 
 ## Max-Increase Objective
 
@@ -177,63 +168,49 @@ $$
 where $m = \arg \min_{a} (Lp)$ and $\gamma$ is the slowdown parameter of
 the objective subgradient (`self.gamma`).
 
-<table>
-<colgroup>
-<col style="width: 27%" />
-<col style="width: 72%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Code</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>X(self,i,j)</code></td>
-<td>This is an alternate implementation to generate <span
-class="math inline">\(\mathbf{q}\)</span> as <span
-class="math inline">\(\mathbf{q} = X\mathbf{p}\)</span>. Here, <span
-class="math inline">\(X = I + E_{ij} - E_{jj}\)</span>. We use this
-because this is more efficient and reusable.</td>
-</tr>
-<tr class="even">
-<td><code>Lt(self,i,j)</code></td>
-<td>To generate <span class="math inline">\(\tilde{L}\)</span> from
-<span class="math inline">\(L\)</span> . Largely the same as the
-<strong>Integral Objective</strong> but we take care of the dimensions
-of <span class="math inline">\(q\)</span> as that is implemented
-slightly differently.</td>
-</tr>
-<tr class="odd">
-<td><code>objectiveFunction(self, p, pk, i, j)</code></td>
-<td>Defines the suboptimality gap objective function after the
-linearization of <span class="math inline">\(P\)</span> around <span
-class="math inline">\(p^k\)</span>.</td>
-</tr>
-<tr class="even">
-<td><code>suboptimalityGap(self, p, i, j)</code></td>
-<td>Defines the suboptimality gap objective function.</td>
-</tr>
-<tr class="odd">
-<td><code>linear_optimizer(self, pk, i, j)</code></td>
-<td>This function performs step-by-step optimization of the linearized
-<code>objectiveFunction</code> .</td>
-</tr>
-<tr class="even">
-<td><code>DCOptimizer(self, i, j)</code></td>
-<td>Performs the complete optimization and stops when change in the
-suboptimality gap dips below the convergence threshold
-<code>self.delta</code> .</td>
-</tr>
-<tr class="odd">
-<td><p><code>probability_constraint(self, p)</code></p>
-<p><code>bounds = [(0,1) for _ in range(self.c)]</code></p>
-<p><code>constraints = ({'type':'eq', 'fun': self.probability_constraint})</code></p></td>
-<td>Defines the constraints for <code>scipy.optimize</code> .</td>
-</tr>
-</tbody>
-</table>
++------------------+---------------------------------------------------+
+| Code             | Purpose                                           |
++==================+===================================================+
+| `X(self,i,j)`    | This is an alternate implementation to generate   |
+|                  | $\mathbf{q}$ as $\mathbf{q} = X\mathbf{p}$. Here, |
+|                  | $X = I + E_{ij} - E_{jj}$. We use this because    |
+|                  | this is more efficient and reusable.              |
++------------------+---------------------------------------------------+
+| `Lt(self,i,j)`   | To generate $\tilde{L}$ from $L$ . Largely the    |
+|                  | same as the **Integral Objective** but we take    |
+|                  | care of the dimensions of $q$ as that is          |
+|                  | implemented slightly differently.                 |
++------------------+---------------------------------------------------+
+| `objec           | Defines the suboptimality gap objective function  |
+| tiveFunction(sel | after the linearization of $P$ around $p^k$.      |
+| f, p, pk, i, j)` |                                                   |
++------------------+---------------------------------------------------+
+| `                | Defines the suboptimality gap objective function. |
+| suboptimalityGap |                                                   |
+| (self, p, i, j)` |                                                   |
++------------------+---------------------------------------------------+
+| `l               | This function performs step-by-step optimization  |
+| inear_optimizer( | of the linearized `objectiveFunction` .           |
+| self, pk, i, j)` |                                                   |
++------------------+---------------------------------------------------+
+| `DCOptimi        | Performs the complete optimization and stops when |
+| zer(self, i, j)` | change in the suboptimality gap dips below the    |
+|                  | convergence threshold `self.delta` .              |
++------------------+---------------------------------------------------+
+| `                | Defines the constraints for `scipy.optimize` .    |
+| probability_cons |                                                   |
+| traint(self, p)` |                                                   |
+|                  |                                                   |
+| `bounds =        |                                                   |
+|  [(0,1) for _ in |                                                   |
+|  range(self.c)]` |                                                   |
+|                  |                                                   |
+| `co              |                                                   |
+| nstraints = ({'t |                                                   |
+| ype':'eq', 'fun' |                                                   |
+| : self.probabili |                                                   |
+| ty_constraint})` |                                                   |
++------------------+---------------------------------------------------+
 
 ## Vertex Objective
 
