@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Ideal Abstractions for Decisions-Focused Learning</title>
+<title>readme</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -34,8 +34,6 @@ ul.task-list li input[type="checkbox"] {
 <link href="README_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="README_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -45,70 +43,58 @@ ul.task-list li input[type="checkbox"] {
 
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Ideal Abstractions for Decisions-Focused Learning</h1>
-</div>
 
 
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-</header>
-
+<section id="ideal-abstractions-for-decisions-focused-learning" class="level1">
+<h1>Ideal Abstractions for Decisions-Focused Learning</h1>
 <ul>
-<li><a href="#decision-theoretic-context" id="toc-decision-theoretic-context">Decision-Theoretic Context</a>
+<li><a href="#decision-theoretic-context">Decision-Theoretic Context</a>
 <ul>
-<li><a href="#fold-a-simplex" id="toc-fold-a-simplex">Fold a Simplex</a></li>
-<li><a href="#computing-decision-losses-on-sets" id="toc-computing-decision-losses-on-sets">Computing Decision Losses on Sets</a></li>
+<li><a href="#fold-a-simplex">Fold a Simplex</a></li>
+<li><a href="#computing-decision-losses-on-sets">Computing Decision Losses on Sets</a></li>
 </ul></li>
-<li><a href="#objective" id="toc-objective">Objective</a>
+<li><a href="#objective">Objective</a>
 <ul>
-<li><a href="#integral-objective" id="toc-integral-objective">Integral Objective</a></li>
-<li><a href="#max-increase-objective" id="toc-max-increase-objective">Max-Increase Objective</a></li>
-<li><a href="#vertex-objective" id="toc-vertex-objective">Vertex Objective</a></li>
+<li><a href="#integral-objective">Integral Objective</a></li>
+<li><a href="#max-increase-objective">Max-Increase Objective</a></li>
+<li><a href="#vertex-objective">Vertex Objective</a></li>
 </ul></li>
-<li><a href="#end." id="toc-end.">End.</a></li>
+<li><a href="#end.">End.</a></li>
 </ul>
 <p>This paper is in the context of Reinforcement Learning. The goal of the paper is to perform <strong>ideal</strong> simplifying abstractions by realizing the utility structure of the decisions.</p>
 <p>Modern machine learning systems deal with vast amounts of complex data, like extremely detailed images or graphs with billions of nodes. How can machine learning methods effectively align with pythonreal-world decision-making based on such large-scale data? Moreover, how can one manage domains where the problem’s complexity makes it challenging to collect sufficient data for predictive model to comprehend the full scope?</p>
-<p>An agent observes <span class="math inline">\(x\)</span>, and given a model <span class="math inline">\(p_\theta(x, z)\)</span> of <span class="math inline">\(p(x,z)\)</span>, returns an action <span class="math inline">\(a\)</span> following the policy <span class="math inline">\(\pi(\mathcal{Z})\)</span>. Domain knowledge about the task is represented as a loss function <span class="math inline">\(l:\mathcal{Z} \times A \to \mathbb{R}\)</span> measuring the cost of performing action <span class="math inline">\(a\)</span> when the outcome is <span class="math inline">\(x\)</span>. The loss function can be represented as <span class="math inline">\(L_{ij} = l(z_i, a_j)\)</span>. Further, <span class="math inline">\(p = \{p(z_i|x)\}_i\)</span> is a vector in <span class="math inline">\(\mathbb{R}^C\)</span> taking values in the probability simplex <span class="math inline">\(\Delta^C\)</span>.</p>
+<p>An agent observes <embed src="https://latex.codecogs.com/svg.latex?x" title="x" class="img-fluid">, and given a model <embed src="https://latex.codecogs.com/svg.latex?p_%5Ctheta%28x%2C%20z%29" title="p_\theta(x, z)" class="img-fluid"> of <embed src="https://latex.codecogs.com/svg.latex?p%28x%2Cz%29" title="p(x,z)" class="img-fluid">, returns an action <embed src="https://latex.codecogs.com/svg.latex?a" title="a" class="img-fluid"> following the policy <embed src="https://latex.codecogs.com/svg.latex?%5Cpi%28%5Cmathcal%7BZ%7D%29" title="\pi(\mathcal{Z})" class="img-fluid">. Domain knowledge about the task is represented as a loss function <embed src="https://latex.codecogs.com/svg.latex?l%3A%5Cmathcal%7BZ%7D%20%5Ctimes%20A%20%5Cto%20%5Cmathbb%7BR%7D" title="l:\mathcal{Z} \times A \to \mathbb{R}" class="img-fluid"> measuring the cost of performing action <embed src="https://latex.codecogs.com/svg.latex?a" title="a" class="img-fluid"> when the outcome is <embed src="https://latex.codecogs.com/svg.latex?x" title="x" class="img-fluid">. The loss function can be represented as <embed src="https://latex.codecogs.com/svg.latex?L_%7Bij%7D%20%3D%20l%28z_i%2C%20a_j%29" title="L_{ij} = l(z_i, a_j)" class="img-fluid">. Further, <embed src="https://latex.codecogs.com/svg.latex?p%20%3D%20%5C%7Bp%28z_i%7Cx%29%5C%7D_i" title="p = {p(z_i|x)}_i" class="img-fluid"> is a vector in <embed src="https://latex.codecogs.com/svg.latex?%5Cmathbb%7BR%7D%5EC" title="\mathbb{R}^C" class="img-fluid"> taking values in the probability simplex <embed src="https://latex.codecogs.com/svg.latex?%5CDelta%5EC" title="\Delta^C" class="img-fluid">.</p>
+</section>
 <section id="decision-theoretic-context" class="level1">
 <h1>Decision-Theoretic Context</h1>
-<p>Our goal is to find the optimal partition of the outcome set <span class="math inline">\(\mathcal{Z}\)</span> such that the net loss of quality of decision-making is counterbalanced by the decrease in the computational resources required. We aim to hide information that is not required in the decision making process. We consider the <strong>H-entropy</strong></p>
-<p><span class="math display">\[
-H_l(p) = \inf_{a \in A} \mathbb{E}_{p(z|x)}l(\mathcal{Z}, a) = \min_{a \in A}(Lp)
-\]</span></p>
-<p>This is the “least possible expected loss” aka “Bayes optimal loss”. We can quantify the increase in the H-entropy (suboptimality gap) caused by partitioning the support <span class="math inline">\(\mathcal{Z}\)</span>:</p>
-<p><span class="math display">\[
-\delta(q,p) = H_{\tilde{l}}(q) - H_l(p)
-\]</span></p>
+<p>Our goal is to find the optimal partition of the outcome set <embed src="https://latex.codecogs.com/svg.latex?%5Cmathcal%7BZ%7D" title="\mathcal{Z}" class="img-fluid"> such that the net loss of quality of decision-making is counterbalanced by the decrease in the computational resources required. We aim to hide information that is not required in the decision making process. We consider the <strong>H-entropy</strong></p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?H_l%28p%29%20%3D%20%5Cinf_%7Ba%20%5Cin%20A%7D%20%5Cmathbb%7BE%7D_%7Bp%28z%7Cx%29%7Dl%28%5Cmathcal%7BZ%7D%2C%20a%29%20%3D%20%5Cmin_%7Ba%20%5Cin%20A%7D%28Lp%29"> <img src="https://latex.codecogs.com/svg.latex?H_l%28p%29%20%3D%20%5Cinf_%7Ba%20%5Cin%20A%7D%20%5Cmathbb%7BE%7D_%7Bp%28z%7Cx%29%7Dl%28%5Cmathcal%7BZ%7D%2C%20a%29%20%3D%20%5Cmin_%7Ba%20%5Cin%20A%7D%28Lp%29" alt="H_l(p)"> </a>
+</p>
+<p>This is the “least possible expected loss” aka “Bayes optimal loss”. We can quantify the increase in the H-entropy (suboptimality gap) caused by partitioning the support <embed src="https://latex.codecogs.com/svg.latex?%5Cmathcal%7BZ%7D" title="\mathcal{Z}" class="img-fluid">:</p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?%5Cdelta%28q%2Cp%29%20%3D%20H_%7B%5Ctilde%7Bl%7D%7D%28q%29%20-%20H_l%28p%29"> <img src="https://latex.codecogs.com/svg.latex?%5Cdelta%28q%2Cp%29%20%3D%20H_%7B%5Ctilde%7Bl%7D%7D%28q%29%20-%20H_l%28p%29" alt="\delta(q,p)"> </a>
+</p>
 <p>We achieve this by noticing that every partition is a culmination of <em>simplex folds</em>.</p>
 <section id="fold-a-simplex" class="level2">
 <h2 class="anchored" data-anchor-id="fold-a-simplex">Fold a Simplex</h2>
-<p>Fold <span class="math inline">\(f_{i \to j}\)</span> “buckets” <span class="math inline">\(z_i\)</span> and <span class="math inline">\(z_j\)</span> together reducing the dimension of the support <span class="math inline">\(\mathcal{Z}\)</span>.</p>
+<p>Fold <embed src="https://latex.codecogs.com/svg.latex?f_%7Bi%20%5Cto%20j%7D" title="f_{i \to j}" class="img-fluid"> “buckets” <embed src="https://latex.codecogs.com/svg.latex?z_i" title="z_i" class="img-fluid"> and <embed src="https://latex.codecogs.com/svg.latex?z_j" title="z_j" class="img-fluid"> together reducing the dimension of the support <embed src="https://latex.codecogs.com/svg.latex?%5Cmathcal%7BZ%7D" title="\mathcal{Z}" class="img-fluid">.</p>
 </section>
 <section id="computing-decision-losses-on-sets" class="level2">
 <h2 class="anchored" data-anchor-id="computing-decision-losses-on-sets">Computing Decision Losses on Sets</h2>
 <p>How is the loss function calculated after we consider the abstraction? Well, naturally, we consider the worst-case extension!</p>
-<p><span class="math display">\[
-\tilde{l}(S, a) = \max_{z \in S} l(z, a), \ S \subset \mathcal{Z}
-\]</span></p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?%5Ctilde%7Bl%7D%28S%2C%20a%29%20%3D%20%5Cmax_%7Bz%20%5Cin%20S%7D%20l%28z%2C%20a%29%2C%20%5C%20S%20%5Csubset%20%5Cmathcal%7BZ%7D"> <img src="https://latex.codecogs.com/svg.latex?%5Ctilde%7Bl%7D%28S%2C%20a%29%20%3D%20%5Cmax_%7Bz%20%5Cin%20S%7D%20l%28z%2C%20a%29%2C%20%5C%20S%20%5Csubset%20%5Cmathcal%7BZ%7D" alt="\tilde{l}(S, a)"> </a>
+</p>
 <p>It is clear that folding increases H-entropy.</p>
 </section>
 </section>
 <section id="objective" class="level1">
 <h1>Objective</h1>
 <p>Now our goal is to, at each step, find the optimal simplex fold. We find</p>
-<p><span class="math display">\[
-i^{\star}, j^{\star} = \arg \min_{i,j, i\neq j} L(i, j, L)
-\]</span></p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?i%5E%7B%5Cstar%7D%2C%20j%5E%7B%5Cstar%7D%20%3D%20%5Carg%20%5Cmin_%7Bi%2Cj%2C%20i%5Cneq%20j%7D%20L%28i%2C%20j%2C%20L%29"> <img src="https://latex.codecogs.com/svg.latex?i%5E%7B%5Cstar%7D%2C%20j%5E%7B%5Cstar%7D%20%3D%20%5Carg%20%5Cmin_%7Bi%2Cj%2C%20i%5Cneq%20j%7D%20L%28i%2C%20j%2C%20L%29" alt="i^{\star}, j^{\star}"> </a>
+</p>
 <p>We can achieve this by three ways:</p>
 <ul>
 <li><p>Integral Objective</p></li>
@@ -118,111 +104,179 @@ i^{\star}, j^{\star} = \arg \min_{i,j, i\neq j} L(i, j, L)
 <section id="integral-objective" class="level2">
 <h2 class="anchored" data-anchor-id="integral-objective">Integral Objective</h2>
 <p>Goal: Use the average amount of suboptimality gap over the probability simplex as the Objective to find ideal abstractions.</p>
-<p><span class="math display">\[L = \frac 1 \lambda \int_{\Delta^C} [H_{\tilde{l}}(f_{i \to j}(\mathbf{p})) - H_l(p) \text{d}\mathbf{p}]\]</span></p>
-<p>To calculate this computationally efficiently, we perform a monte-carlo estimate. We pick <span class="math inline">\(N\)</span> points on the probability simplex and find the average of the suboptimality gap over those <span class="math inline">\(N\)</span> points.</p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?L%20%3D%20%5Cfrac%201%20%5Clambda%20%5Cint_%7B%5CDelta%5EC%7D%20%5BH_%7B%5Ctilde%7Bl%7D%7D%28f_%7Bi%20%5Cto%20j%7D%28%5Cmathbf%7Bp%7D%29%29%20-%20H_l%28%5Cmathbf%7Bp%7D%29%20%5Ctext%7Bd%7D%5Cmathbf%7Bp%7D%5D"> <img src="https://latex.codecogs.com/svg.latex?L%20%3D%20%5Cfrac%201%20%5Clambda%20%5Cint_%7B%5CDelta%5EC%7D%20%5BH_%7B%5Ctilde%7Bl%7D%7D%28f_%7Bi%20%5Cto%20j%7D%28%5Cmathbf%7Bp%7D%29%29%20-%20H_l%28%5Cmathbf%7Bp%7D%29%20%5Ctext%7Bd%7D%5Cmathbf%7Bp%7D%5D" alt="L = \frac 1 \lambda \int_{\Delta^C} [H_{\tilde{l}}(f_{i \to j}(\mathbf{p})) - H_l(\mathbf{p}) \text{d}\mathbf{p}]"> </a>
+</p>
+<p>To calculate this computationally efficiently, we perform a monte-carlo estimate. We pick <embed src="https://latex.codecogs.com/svg.latex?N" title="N" class="img-fluid"> points on the probability simplex and find the average of the suboptimality gap over those <embed src="https://latex.codecogs.com/svg.latex?N" title="N" class="img-fluid"> points.</p>
+
 <table class="table">
 <colgroup>
 <col style="width: 23%">
-<col style="width: 75%">
+<col style="width: 76%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Code</th>
-<th>Purpose</th>
+<th>
+Code
+</th>
+<th>
+Purpose
+</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>gene rate_points_in _simplex(N,c)</code></td>
-<td>Generates <span class="math inline">\(N\)</span> random points on the probability simplex <span class="math inline">\(\Delta^c\)</span>.</td>
+<td>
+<code>generate_points_in_simplex(N,c)</code>
+</td>
+<td>
+Generates <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20N" alt="N" title="N" class="math inline"> random points on the probability simplex <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5CDelta%5Ec" alt="\Delta^c" title="\Delta^c" class="math inline">.
+</td>
 </tr>
 <tr class="even">
-<td><code>fol d(p, L, i, j)</code></td>
-<td>Folds <span class="math inline">\(\mathbf{p} \to \mathbf{q}\)</span> and <span class="math inline">\(\mathbf{L} \to \mathbf{\tilde{L}}\)</span> by deleting <span class="math inline">\(\max(i,j)\)</span>, column in <span class="math inline">\(L\)</span> and row in <span class="math inline">\(p\)</span>, and assimilating it in <span class="math inline">\(\min(i,j)\)</span> row in <span class="math inline">\(L\)</span> and column <span class="math inline">\(p\)</span>.</td>
+<td>
+<code>fold(p, L, i, j)</code>
+</td>
+<td>
+Folds <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bp%7D%20%5Cto%20%5Cmathbf%7Bq%7D" alt="\mathbf{p} \to \mathbf{q}" title="\mathbf{p} \to \mathbf{q}" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7BL%7D%20%5Cto%20%5Cmathbf%7B%5Ctilde%7BL%7D%7D" alt="\mathbf{L} \to \mathbf{\tilde{L}}" title="\mathbf{L} \to \mathbf{\tilde{L}}" class="math inline"> by deleting <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmax%28i%2Cj%29" alt="\max(i,j)" title="\max(i,j)" class="math inline">, column in <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20L" alt="L" title="L" class="math inline"> and row in <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p" alt="p" title="p" class="math inline">, and assimilating it in <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmin%28i%2Cj%29" alt="\min(i,j)" title="\min(i,j)" class="math inline"> row in <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20L" alt="L" title="L" class="math inline"> and column <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p" alt="p" title="p" class="math inline">.
+</td>
 </tr>
 <tr class="odd">
-<td><p><code>H_p = n p.einsum("ac,c b-&gt;ab", L, p). min(axis = 0)</code></p>
-<p><code>H_q = n p.einsum("ac,c b-&gt;ab", L, q). min(axis = 0)</code></p></td>
-<td><strong>einsum(“ac, cb-&gt;ab”)</strong> performs <span class="math inline">\(Lp\)</span> and <span class="math inline">\(Lq\)</span> respectively, and finds the minimum of all the rows.</td>
+<td>
+<p>
+<code>H_p = np.einsum(“ac,cb-&gt;ab”, L, p).min(axis = 0)</code>
+</p>
+<p>
+<code>H_q = np.einsum(“ac,cb-&gt;ab”, L, q).min(axis = 0)</code>
+</p>
+</td>
+<td>
+<strong>einsum(“ac, cb-&gt;ab”)</strong> performs <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20Lp" alt="Lp" title="Lp" class="math inline"> and <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20Lq" alt="Lq" title="Lq" class="math inline"> respectively, and finds the minimum of all the rows.
+</td>
 </tr>
 <tr class="even">
-<td><code>i_fold, j_fold  = np.unravel_ index(np.argmi n(M), M.shape</code></td>
-<td><strong>unravel_index</strong> “opens” the array and argmin finds the index with the associate minimum value.</td>
+<td>
+<code>i_fold, j_fold = np.unravel_index(np.argmin(M), M.shape</code>
+</td>
+<td>
+<strong>unravel_index</strong> “opens” the array and argmin finds the index with the associate minimum value.
+</td>
 </tr>
 </tbody>
+
 </table>
 </section>
 <section id="max-increase-objective" class="level2">
 <h2 class="anchored" data-anchor-id="max-increase-objective">Max-Increase Objective</h2>
 <p>Goal: Use the max-increase suboptimality gap over the probability simplex as the Objective to find ideal abstractions.</p>
-<p><span class="math display">\[
-L = \sup_{p \in \Delta^C}[H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})] = \max_{p \in \Delta^C} [H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})]
-\]</span></p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?L%20%3D%20%5Csup_%7Bp%20%5Cin%20%5CDelta%5EC%7D%5BH_%7B%5Ctilde%7Bl%7D%28f_%7Bi%20%5Cto%20j%7D%28%5Cmathbf%7Bp%7D%29%7D%20-%20H_l%28%5Cmathbf%7Bp%7D%29%5D%20%3D%20%5Cmax_%7Bp%20%5Cin%20%5CDelta%5EC%7D%20%5BH_%7B%5Ctilde%7Bl%7D%28f_%7Bi%20%5Cto%20j%7D%28%5Cmathbf%7Bp%7D%29%7D%20-%20H_l%28%5Cmathbf%7Bp%7D%29%5D"> <img src="https://latex.codecogs.com/svg.latex?L%20%3D%20%5Csup_%7Bp%20%5Cin%20%5CDelta%5EC%7D%5BH_%7B%5Ctilde%7Bl%7D%28f_%7Bi%20%5Cto%20j%7D%28%5Cmathbf%7Bp%7D%29%7D%20-%20H_l%28%5Cmathbf%7Bp%7D%29%5D%20%3D%20%5Cmax_%7Bp%20%5Cin%20%5CDelta%5EC%7D%20%5BH_%7B%5Ctilde%7Bl%7D%28f_%7Bi%20%5Cto%20j%7D%28%5Cmathbf%7Bp%7D%29%7D%20-%20H_l%28%5Cmathbf%7Bp%7D%29%5D" alt="L = \sup_{p \in \Delta^C}[H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})] = \max_{p \in \Delta^C} [H_{\tilde{l}(f_{i \to j}(\mathbf{p})} - H_l(\mathbf{p})]"> </a>
+</p>
 <p>To calculate this, we notice that</p>
-<p><span class="math display">\[
-L = \max_{p \in \Delta^C} \left[\underbrace{\min_{a}(\tilde{L}q)}_{\text{concave}} - \underbrace{\min_{a}(Lp)}_{\text{concave}}\right] = \max_{p \in \Delta^C} \left[Q(q) - P(p)\right]
-\]</span></p>
-<p><span class="math inline">\(L\)</span> is a difference of concave function, and thus we use an algorithm to solve problems in the class <em>difference of convex or concave problems.</em></p>
-<p>What do we do? At every point in the algorithm, we start with a <span class="math inline">\(p^k\)</span> (starting with <span class="math inline">\(0\)</span>), linearize <span class="math inline">\(P\)</span> around <span class="math inline">\(p^k\)</span> and then optimize <span class="math inline">\(L\)</span> around that linearization of <span class="math inline">\(P\)</span>. Using this we find the next point <span class="math inline">\(p^{k+1}\)</span>, and keep repeating this process until the absolute change in the suboptimality gap is below the convergence threshold <span class="math inline">\(\delta\)</span> (<code>self.delta</code>).</p>
-<p>How is <span class="math inline">\(P\)</span> linearized? Well, for a <span class="math inline">\(p^k\)</span> we find the subgradient <span class="math inline">\(g_k\)</span> of <span class="math inline">\(\min_{a}(Lp)\)</span>.</p>
-<p><span class="math display">\[
-g_k = \frac{1}{\gamma} L_m^T
-\]</span></p>
-<p>where <span class="math inline">\(m = \arg \min_{a} (Lp)\)</span> and <span class="math inline">\(\gamma\)</span> is the slowdown parameter of the objective subgradient (<code>self.gamma</code>).</p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?L%20%3D%20%5Cmax_%7Bp%20%5Cin%20%5CDelta%5EC%7D%20%5Cleft%5B%5Cunderbrace%7B%5Cmin_%7Ba%7D%28%5Ctilde%7BL%7Dq%29%7D_%7B%5Ctext%7Bconcave%7D%7D%20-%20%5Cunderbrace%7B%5Cmin_%7Ba%7D%28Lp%29%7D_%7B%5Ctext%7Bconcave%7D%7D%5Cright%5D%20%3D%20%5Cmax_%7Bp%20%5Cin%20%5CDelta%5EC%7D%20%5Cleft%5BQ%28q%29%20-%20P%28p%29%5Cright%5D"> <img src="https://latex.codecogs.com/svg.latex?L%20%3D%20%5Cmax_%7Bp%20%5Cin%20%5CDelta%5EC%7D%20%5Cleft%5B%5Cunderbrace%7B%5Cmin_%7Ba%7D%28%5Ctilde%7BL%7Dq%29%7D_%7B%5Ctext%7Bconcave%7D%7D%20-%20%5Cunderbrace%7B%5Cmin_%7Ba%7D%28Lp%29%7D_%7B%5Ctext%7Bconcave%7D%7D%5Cright%5D%20%3D%20%5Cmax_%7Bp%20%5Cin%20%5CDelta%5EC%7D%20%5Cleft%5BQ%28q%29%20-%20P%28p%29%5Cright%5D" alt="L = \max_{p \in \Delta^C} \left[\underbrace{\min_{a}(\tilde{L}q)}_{\text{concave}} - \underbrace{\min_{a}(Lp)}_{\text{concave}}\right] = \max_{p \in \Delta^C} \left[Q(q) - P(p)\right]"> </a>
+</p>
+<p><embed src="https://latex.codecogs.com/svg.latex?L" title="L" class="img-fluid"> is a difference of concave function, and thus we use an algorithm to solve problems in the class <em>difference of convex or concave problems.</em></p>
+<p>What do we do? At every point in the algorithm, we start with a <embed src="https://latex.codecogs.com/svg.latex?p%5Ek" title="p^k" class="img-fluid"> (starting with <embed src="https://latex.codecogs.com/svg.latex?0" title="0" class="img-fluid">), linearize <embed src="https://latex.codecogs.com/svg.latex?P" title="P" class="img-fluid"> around <embed src="https://latex.codecogs.com/svg.latex?p%5Ek" title="p^k" class="img-fluid"> and then optimize <embed src="https://latex.codecogs.com/svg.latex?L" title="L" class="img-fluid"> around that linearization of <embed src="https://latex.codecogs.com/svg.latex?P" title="P" class="img-fluid">. Using this we find the next point <embed src="https://latex.codecogs.com/svg.latex?p%5E%7Bk%2B1%7D" title="p^{k+1}" class="img-fluid">, and keep repeating this process until the absolute change in the suboptimality gap is below the convergence threshold <embed src="https://latex.codecogs.com/svg.latex?%5Cdelta" title="\delta" class="img-fluid"> (<code>self.delta</code>).</p>
+<p>How is <embed src="https://latex.codecogs.com/svg.latex?P" title="P" class="img-fluid"> linearized? Well, for a <embed src="https://latex.codecogs.com/svg.latex?p%5Ek" title="p^k" class="img-fluid"> we find the subgradient <embed src="https://latex.codecogs.com/svg.latex?g_k" title="g_k" class="img-fluid"> of <embed src="https://latex.codecogs.com/svg.latex?%5Cmin_%7Ba%7D%28Lp%29" title="\min_{a}(Lp)" class="img-fluid">.</p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?g_k%20%3D%20%5Cfrac%7B1%7D%7B%5Cgamma%7D%20L_m%5ET"> <img src="https://latex.codecogs.com/svg.latex?g_k%20%3D%20%5Cfrac%7B1%7D%7B%5Cgamma%7D%20L_m%5ET" alt="g_k = \frac{1}{\gamma} L_m^T"> </a>
+</p>
+<p>where <embed src="https://latex.codecogs.com/svg.latex?m%20%3D%20%5Carg%20%5Cmin_%7Ba%7D%20%28Lp%29" title="m = \arg \min_{a} (Lp)" class="img-fluid"> and <embed src="https://latex.codecogs.com/svg.latex?%5Cgamma" title="\gamma" class="img-fluid"> is the slowdown parameter of the objective subgradient (<code>self.gamma</code>).</p>
+
 <table class="table">
 <colgroup>
-<col style="width: 26%">
+<col style="width: 27%">
 <col style="width: 72%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Code</th>
-<th>Purpose</th>
+<th>
+Code
+</th>
+<th>
+Purpose
+</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>X(self,i,j)</code></td>
-<td>This is an alternate implementation to generate <span class="math inline">\(\mathbf{q}\)</span> as <span class="math inline">\(\mathbf{q} = X\mathbf{p}\)</span>. Here, <span class="math inline">\(X = I + E_{ij} - E_{jj}\)</span>. We use this because this is more efficient and reusable.</td>
+<td>
+<code>X(self,i,j)</code>
+</td>
+<td>
+This is an alternate implementation to generate <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bq%7D" alt="\mathbf{q}" title="\mathbf{q}" class="math inline"> as <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Cmathbf%7Bq%7D%20%3D%20X%5Cmathbf%7Bp%7D" alt="\mathbf{q} = X\mathbf{p}" title="\mathbf{q} = X\mathbf{p}" class="math inline">. Here, <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20X%20%3D%20I%20%2B%20E_%7Bij%7D%20-%20E_%7Bjj%7D" alt="X = I + E_{ij} - E_{jj}" title="X = I + E_{ij} - E_{jj}" class="math inline">. We use this because this is more efficient and reusable.
+</td>
 </tr>
 <tr class="even">
-<td><code>Lt(self,i,j)</code></td>
-<td>To generate <span class="math inline">\(\tilde{L}\)</span> from <span class="math inline">\(L\)</span> . Largely the same as the <strong>Integral Objective</strong> but we take care of the dimensions of <span class="math inline">\(q\)</span> as that is implemented slightly differently.</td>
+<td>
+<code>Lt(self,i,j)</code>
+</td>
+<td>
+To generate <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20%5Ctilde%7BL%7D" alt="\tilde{L}" title="\tilde{L}" class="math inline"> from <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20L" alt="L" title="L" class="math inline"> . Largely the same as the <strong>Integral Objective</strong> but we take care of the dimensions of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20q" alt="q" title="q" class="math inline"> as that is implemented slightly differently.
+</td>
 </tr>
 <tr class="odd">
-<td><code>objec tiveFunction(sel f, p, pk, i, j)</code></td>
-<td>Defines the suboptimality gap objective function after the linearization of <span class="math inline">\(P\)</span> around <span class="math inline">\(p^k\)</span>.</td>
+<td>
+<code>objectiveFunction(self, p, pk, i, j)</code>
+</td>
+<td>
+Defines the suboptimality gap objective function after the linearization of <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20P" alt="P" title="P" class="math inline"> around <img style="vertical-align:middle" src="https://latex.codecogs.com/svg.latex?%5Ctextstyle%20p%5Ek" alt="p^k" title="p^k" class="math inline">.
+</td>
 </tr>
 <tr class="even">
-<td><code>suboptimalityGap (self, p, i, j)</code></td>
-<td>Defines the suboptimality gap objective function.</td>
+<td>
+<code>suboptimalityGap(self, p, i, j)</code>
+</td>
+<td>
+Defines the suboptimality gap objective function.
+</td>
 </tr>
 <tr class="odd">
-<td><code>l inear_optimizer( self, pk, i, j)</code></td>
-<td>This function performs step-by-step optimization of the linearized <code>objectiveFunction</code> .</td>
+<td>
+<code>linear_optimizer(self, pk, i, j)</code>
+</td>
+<td>
+This function performs step-by-step optimization of the linearized <code>objectiveFunction</code> .
+</td>
 </tr>
 <tr class="even">
-<td><code>DCOptimi zer(self, i, j)</code></td>
-<td>Performs the complete optimization and stops when change in the suboptimality gap dips below the convergence threshold <code>self.delta</code> .</td>
+<td>
+<code>DCOptimizer(self, i, j)</code>
+</td>
+<td>
+Performs the complete optimization and stops when change in the suboptimality gap dips below the convergence threshold <code>self.delta</code> .
+</td>
 </tr>
 <tr class="odd">
-<td><p><code>probability_cons traint(self, p)</code></p>
-<p><code>bounds =  [(0,1) for _ in  range(self.c)]</code></p>
-<p><code>co nstraints = ({'t ype':'eq', 'fun' : self.probabili ty_constraint})</code></p></td>
-<td>Defines the constraints for <code>scipy.optimize</code> .</td>
+<td>
+<p>
+<code>probability_constraint(self, p)</code>
+</p>
+<p>
+<code>bounds = [(0,1) for _ in range(self.c)]</code>
+</p>
+<p>
+<code>constraints = ({‘type’:‘eq’, ‘fun’: self.probability_constraint})</code>
+</p>
+</td>
+<td>
+Defines the constraints for <code>scipy.optimize</code> .
+</td>
 </tr>
 </tbody>
+
 </table>
 </section>
 <section id="vertex-objective" class="level2">
 <h2 class="anchored" data-anchor-id="vertex-objective">Vertex Objective</h2>
-<p>Goal: Only care about the vertices of <span class="math inline">\(\Delta^c\)</span> to find suboptimality gap.</p>
-<p><span class="math display">\[
-\mathcal{L_{i,j}} = \left[H_l(p^{(i)}) - H_l(p^{(j)})\right] = [\min_a(L_i) - \min_a(L_i)]
-\]</span></p>
-<p><span class="math display">\[
-i^{\star}, j^{\star} = \min_{i \neq j} L_{i,j}
-\]</span></p>
+<p>Goal: Only care about the vertices of <embed src="https://latex.codecogs.com/svg.latex?%5CDelta%5Ec" title="\Delta^c" class="img-fluid"> to find suboptimality gap.</p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?%5Cmathcal%7BL%7D_%7Bi%2Cj%7D%20%3D%20%5Cleft%5BH_l%28p%5E%7B%28i%29%7D%29%20-%20H_l%28p%5E%7B%28j%29%7D%29%5Cright%5D%20%3D%20%5B%5Cmin_a%28L_i%29%20-%20%5Cmin_a%28L_i%29%5D"> <img src="https://latex.codecogs.com/svg.latex?%5Cmathcal%7BL%7D_%7Bi%2Cj%7D%20%3D%20%5Cleft%5BH_l%28p%5E%7B%28i%29%7D%29%20-%20H_l%28p%5E%7B%28j%29%7D%29%5Cright%5D%20%3D%20%5B%5Cmin_a%28L_i%29%20-%20%5Cmin_a%28L_i%29%5D" alt="\mathcal{L}_{i,j} = \left[H_l(p^{(i)}) - H_l(p^{(j)})\right] = [\min_a(L_i) - \min_a(L_i)]"> </a>
+</p>
+<p align="center">
+<a href="https://latex.codecogs.com/svg.latex?i%5E%7B%5Cstar%7D%2C%20j%5E%7B%5Cstar%7D%20%3D%20%5Cmin_%7Bi%20%5Cneq%20j%7D%20L_%7Bi%2Cj%7D"> <img src="https://latex.codecogs.com/svg.latex?i%5E%7B%5Cstar%7D%2C%20j%5E%7B%5Cstar%7D%20%3D%20%5Cmin_%7Bi%20%5Cneq%20j%7D%20L_%7Bi%2Cj%7D" alt="i^{\star}, j^{\star} = \min_{i \neq j} L_{i,j}"> </a>
+</p>
 <p>The implementation is fairly trivial to understand.</p>
 </section>
 </section>
