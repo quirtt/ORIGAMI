@@ -74,7 +74,7 @@ It is clear that folding increases H-entropy.
 Now our goal is to, at each step, find the optimal simplex fold. We find
 
 $$
-i^*, j^* = \arg \min_{i,j, i\neq j} L(i, j, L)
+i^{\star}, j^{\star} = \arg \min_{i,j, i\neq j} L(i, j, L)
 $$
 
 We can achieve this by three ways:
@@ -245,7 +245,7 @@ $$
 $$
 
 $$
-i^*, j^* = \min_{i \neq j} L_{i,j}
+i^{\star}, j^{\star} = \min_{i \neq j} L_{i,j}
 $$
 
 The implementation is fairly trivial to understand.
