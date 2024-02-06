@@ -65,11 +65,12 @@ def FoldWithMaxIncreaseObjective(L, c, delta, gamma):
     #H_l(p) = min_i (L_i*p)
     # subgradient(H_l(p)) = L_i/lambda
 
+    MI = Max_Increase(c,L,delta,gamma)
     M = np.zeros((c,c))
     M += 10**4
     for i in range(c):
         for j in range(i+1, c):
-            p, value = Max_Increase(c,L,delta,gamma).DCOptimizer(i,j)
+            p, value = MI.DCOptimizer(i,j)
             M[i, j] = value
 
     i_fold, j_fold = np.unravel_index(np.argmin(M), M.shape)
